@@ -1,0 +1,32 @@
+# Processed by chibios_hwdef.py
+
+include common.inc
+
+# Bootloader is installed at zero offset
+FLASH_RESERVE_START_KB 0
+
+# Location where the bootloader will put the firmware
+FLASH_BOOTLOADER_LOAD_KB 128
+
+SERIAL_ORDER OTG1 UART1 USART3 USART5
+
+PA15 IMU1_CS CS # SPI3 CS - BMI270
+PD4  IMU2_CS CS # SPI2 CS - BMI088_ACCEL
+PD5  IMU3_CS CS # SPI2 CS - BMI088_GYRO
+PB12 EXT1_CS CS # SPI1 CS - external
+
+# Telem1 - Telem
+PA9  USART1_TX  USART1
+PA10 USART1_RX  USART1
+
+# GPS
+PD8 USART3_TX USART3
+PD9 USART3_RX USART3
+
+# Armed indication
+PB2 nARMED OUTPUT HIGH
+
+# LEDs
+PE3 LED_ACTIVITY OUTPUT OPENDRAIN HIGH # red
+PE4 LED_BOOTLOADER OUTPUT OPENDRAIN HIGH # blue
+define HAL_LED_ON 0

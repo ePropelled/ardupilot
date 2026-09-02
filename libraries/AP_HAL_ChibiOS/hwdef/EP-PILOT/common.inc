@@ -1,0 +1,41 @@
+# MCU class and specific type
+MCU STM32H7xx STM32H743xx
+
+# board ID for firmware load
+APJ_BOARD_ID TARGET_HW_EP_PILOT
+
+# crystal frequency
+OSCILLATOR_HZ 25000000
+
+# 480Hz is only value support on H7
+# MCU_CLOCKRATE_MHZ 320
+
+# flash size
+FLASH_SIZE_KB 2048
+
+# enable DFU reboot for installing bootloader
+# note that if firmware is build with --secure-bl then DFU is
+# disabled
+ENABLE_DFU_BOOT 1
+
+# USB
+PA11 OTG_FS_DM OTG1
+PA12 OTG_FS_DP OTG1
+PC5  VBUS INPUT OPENDRAIN
+
+# SWD
+PA13 JTMS-SWDIO SWD
+PA14 JTCK-SWCLK SWD
+
+# debug uart
+PB6 UART5_TX UART5
+PB5 UART5_RX UART5
+
+# SD card
+PC12 SDMMC1_CK SDMMC1
+PD2  SDMMC1_CMD SDMMC1
+PC8  SDMMC1_D0 SDMMC1
+PC9  SDMMC1_D1 SDMMC1
+PC10 SDMMC1_D2 SDMMC1
+PC11 SDMMC1_D3 SDMMC1
+define FATFS_HAL_DEVICE SDCD1
