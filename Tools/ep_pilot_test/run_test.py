@@ -1,22 +1,34 @@
-print("=" * 55)
-print("       EP-PILOT ENGINEERING TEST UTILITY")
-print("=" * 55)
-print()
-print("[PASS] Python test environment started successfully.")
-print()
-print("Available tests:")
-print()
-print("  1 - RC / ExpressLRS")
-print("  Q - Exit")
-print()
+import sys
 
-choice = input("Select test: ").strip().upper()
+from tests.COM_USB_001 import run_test as run_usb_test
 
-if choice == "1":
+
+def main():
+    print("=" * 60)
+    print("         EP-PILOT ENGINEERING TEST UTILITY")
+    print("=" * 60)
     print()
-    print("[INFO] RC / ExpressLRS test selected.")
-    print("[INFO] Test implementation will run here.")
-elif choice == "Q":
-    print("Exiting.")
-else:
+    print("Available tests:")
+    print()
+    print("  1 - USB / MAVLink Communication")
+    print("  Q - Exit")
+    print()
+
+    choice = input("Select test: ").strip().upper()
+
+    print()
+
+    if choice == "1":
+        result = run_usb_test()
+        sys.exit(0 if result else 1)
+
+    if choice == "Q":
+        print("Exiting.")
+        sys.exit(0)
+
     print("[FAIL] Invalid selection.")
+    sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()
