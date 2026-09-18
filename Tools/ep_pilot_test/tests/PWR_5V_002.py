@@ -4,8 +4,8 @@ from pymavlink import mavutil
 
 def run_test():
     print("=" * 60)
-    print("TEST ID : COM-USB-001")
-    print("TEST    : USB / MAVLink / VBUS Detection")
+    print("TEST ID : PWR-5V-001")
+    print("TEST    : 5V Rail Monitor")
     print("=" * 60)
     print()
 
@@ -27,6 +27,7 @@ def run_test():
 
     try:
         selected_index = int(selection) - 1
+
         if selected_index < 0 or selected_index >= len(ports):
             print("[FAIL] Invalid COM port selection.")
             return False
@@ -56,18 +57,15 @@ def run_test():
     print()
     print("[INFO] Waiting for MAVLink HEARTBEAT...")
 
-    try:
-        heartbeat = master.wait_heartbeat(timeout=10)
-    except Exception as exc:
-        print("[FAIL] Error while waiting for HEARTBEAT.")
-        print(f"       Reason: {exc}")
-        return False
+    heartbeat = master.wait_heartbeat(timeout=10)
 
     if heartbeat is None:
-        print("[FAIL] No MAVLink HEARTBEAT received within 10 seconds.")
+        print("[FAIL] No MAVLink HEARTBEAT received.")
         return False
 
-        print()
+    print("[PASS] MAVLink HEARTBEAT received.")
+
+    print()
     print("[INFO] Requesting POWER_STATUS from flight controller...")
 
     master.mav.command_long_send(
@@ -95,20 +93,25 @@ def run_test():
         return False
 
     print("[PASS] POWER_STATUS received.")
-    print(f"       Vcc    : {power_status.Vcc} mV")
-    print(f"       Vservo : {power_status.Vservo} mV")
-    print(f"       Flags  : 0x{power_status.flags:04X}")
 
-    usb_flag = mavutil.mavlink.MAV_POWER_STATUS_USB_CONNECTED
+    board_voltage_mv = power_status.Vcc
+
+    print(f"       Board voltage : {board_voltage_mv} mV")
+
+    expected_mv = 5000
+    tolerance_mv = 250
+
+    lower_limit = expected_mv - tolerance_mv
+    upper_limit = expected_mv + tolerance_mv
 
     print()
-    print("[INFO] Checking MAV_POWER_STATUS_USB_CONNECTED...")
+    print("[INFO] Checking 5V rail...")
+    print(f"       Expected      : {expected_mv} mV")
+    print(f"       Acceptable    : {lower_limit} to {upper_limit} mV")
 
-    if power_status.flags & usb_flag:
-        print("[PASS] USB_CONNECTED flag is SET.")
-        print(f"       USB bit mask : 0x{usb_flag:04X}")
+    if lower_limit <= board_voltage_mv <= upper_limit:
+        print("[PASS] 5V rail is within acceptable range.")
         return True
-    else:
-        print("[FAIL] USB_CONNECTED flag is NOT set.")
-        print(f"       USB bit mask : 0x{usb_flag:04X}")
-        return False
+
+    print("[FAIL] 5V rail is outside acceptable range.")
+    return False

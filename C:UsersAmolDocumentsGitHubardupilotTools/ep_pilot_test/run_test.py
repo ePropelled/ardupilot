@@ -3,8 +3,6 @@ import sys
 from datetime import datetime
 
 from tests.COM_USB_001 import run_test as run_usb_test
-from tests.PWR_5V_002 import run_test as run_5v_test
-from tests.BAT_VTG_SENSE_003 import run_test as run_bat_vtg_sense_test
 
 
 class Tee:
@@ -46,8 +44,6 @@ def main():
     print("Available tests:")
     print()
     print("  1 - USB / MAVLink Communication")
-    print("  2 - 5V Rail Monitor")
-    print("  3 - Battery Voltage Sense")
     print("  Q - Exit")
     print()
 
@@ -78,52 +74,6 @@ def main():
             else:
                 print("FINAL RESULT : FAIL")
 
-            print("=" * 60)
-
-        finally:
-            sys.stdout = sys.__stdout__
-            sys.stderr = sys.__stderr__
-            log_handle.close()
-
-        print()
-        print(f"Test log saved to:")
-        print(log_file)
-
-        sys.exit(0 if result else 1)
-
-    if choice == "2":
-        test_id = "PWR_5V_001"
-        log_file, log_handle = start_log(test_id)
-
-        try:
-            result = run_5v_test()
-
-            print()
-            print("=" * 60)
-            print("FINAL RESULT : PASS" if result else "FINAL RESULT : FAIL")
-            print("=" * 60)
-
-        finally:
-            sys.stdout = sys.__stdout__
-            sys.stderr = sys.__stderr__
-            log_handle.close()
-
-        print()
-        print(f"Test log saved to:")
-        print(log_file)
-
-        sys.exit(0 if result else 1)
-    
-    if choice == "3":
-        test_id = "BAT_VTG_SENSE_003"
-        log_file, log_handle = start_log(test_id)
-
-        try:
-            result = run_bat_vtg_sense_test()
-
-            print()
-            print("=" * 60)
-            print("FINAL RESULT : PASS" if result else "FINAL RESULT : FAIL")
             print("=" * 60)
 
         finally:

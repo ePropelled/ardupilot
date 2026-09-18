@@ -107,7 +107,6 @@ def run_test():
     if power_status.flags & usb_flag:
         print("[PASS] USB_CONNECTED flag is SET.")
         print(f"       USB bit mask : 0x{usb_flag:04X}")
-        return True
     else:
         print("[FAIL] USB_CONNECTED flag is NOT set.")
         print(f"       USB bit mask : 0x{usb_flag:04X}")
